@@ -1,3 +1,6 @@
 .venv
 .python-version
 actions.py
+build/
+dist/
+*.egg-info/
