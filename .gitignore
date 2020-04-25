@@ -7,7 +7,7 @@ dist/
 *.egg-info/
 .tox/
 __pycache__
-tests/integration/**/actual.yml
-tests/integration/**/errors.log
-tests/integration/**/diff.log
+tests/integration/**/actual*.yml
+tests/integration/**/errors*.log
+tests/integration/**/diff*.log
 .mypy_cache/

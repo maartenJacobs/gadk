@@ -175,7 +175,7 @@ class Workflow(Yamlable):
     def __init__(self, filename: str, name: Optional[str] = None) -> None:
         super().__init__()
         self.filename: str = filename
-        self._name: Optional[str] = name
+        self.name: Optional[str] = name
         self._on: Dict[str, On] = {}
         self.jobs: Dict[str, Job] = {}
 
@@ -191,8 +191,8 @@ class Workflow(Yamlable):
 
     def to_yaml(self) -> Any:
         workflow: Dict[str, Any] = {}
-        if self._name:
-            workflow["name"] = self._name
+        if self.name:
+            workflow["name"] = self.name
         workflow["on"] = {on_key: on.to_yaml() for on_key, on in self._on.items()}
         if self.jobs:
             workflow["jobs"] = {
