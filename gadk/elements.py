@@ -174,7 +174,7 @@ class Job(Yamlable):
 class Workflow(Yamlable):
     def __init__(self, filename: str, name: Optional[str] = None) -> None:
         super().__init__()
-        self._filename: str = filename
+        self.filename: str = filename
         self._name: Optional[str] = name
         self._on: Dict[str, On] = {}
         self.jobs: Dict[str, Job] = {}

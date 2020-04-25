@@ -1,6 +1,6 @@
 import importlib
-from os import getcwd
-from typing import Any, List, Type
+from os import getcwd, makedirs
+from typing import Any, List
 
 import click
 import sys
@@ -8,12 +8,16 @@ import sys
 from gadk import Workflow
 
 
-def output_to_file(workflow_out: str):
-    pass
+def output_to_file(workflow: Workflow):
+    """Write the workflow to .github/workflows/{workflow.filename}.yml."""
+
+    makedirs(".github/workflows/", exist_ok=True)
+    with open(f".github/workflows/{workflow.filename}.yml", mode="w") as fd:
+        fd.write(workflow.render())
 
 
-def output_to_stdout(workflow_out: str):
-    print(workflow_out)
+def output_to_stdout(workflow: Workflow):
+    print(workflow.render())
 
 
 def workflows_from_module(actions: Any) -> List[Workflow]:
@@ -49,7 +53,7 @@ def cmd(print: bool):
 
     # Assume actions.py imports all elements of gadk to get subclasses of Workflow.
     for workflow in workflows_from_module(actions):
-        outputter(workflow.render())
+        outputter(workflow)
 
 
 if __name__ == "__main__":
