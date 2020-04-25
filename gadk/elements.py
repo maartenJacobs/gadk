@@ -156,7 +156,7 @@ class Job(Yamlable):
         self._steps.append(step)
 
     def to_yaml(self) -> Any:
-        job = {}
+        job: Dict[str, Any] = {}
         if self._if:
             job["if"] = self._if
         if self._needs:
@@ -190,7 +190,7 @@ class Workflow(Yamlable):
             del self._on["push"]
 
     def to_yaml(self) -> Any:
-        workflow = {
+        workflow: Dict[str, Any] = {
             "name": self._name,
         }
         if self._on:
