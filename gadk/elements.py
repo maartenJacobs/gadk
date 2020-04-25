@@ -201,5 +201,5 @@ class Workflow(Yamlable):
             }
         return workflow
 
-    def render(self):
-        print(yaml.safe_dump(self.to_yaml(), sort_keys=False))
+    def render(self) -> str:
+        return yaml.safe_dump(self.to_yaml(), sort_keys=False)

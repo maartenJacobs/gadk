@@ -16,7 +16,7 @@ do
   cd "$test_scenario"
 
   set +e
-  gadk 1> actual.yml 2> errors.log
+  gadk --print 1> actual.yml 2> errors.log
   set -e
 
   # Confirm that there are no errors.

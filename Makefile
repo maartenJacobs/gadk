@@ -3,3 +3,6 @@ lint:
 
 test:
 	tox
+
+format:
+	black gadk/

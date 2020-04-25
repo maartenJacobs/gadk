@@ -11,6 +11,7 @@ include = ["CHANGELOG.md"]
 [tool.poetry.dependencies]
 python = ">=3.6"
 pyyaml = "^5.3"
+click = "^7.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
