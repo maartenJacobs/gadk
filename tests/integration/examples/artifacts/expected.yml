@@ -1,4 +1,5 @@
 name: my service workflow
+'on': {}
 jobs:
   build:
     runs-on: ubuntu-18.04

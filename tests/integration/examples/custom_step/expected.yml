@@ -1,4 +1,5 @@
 name: foobar service
+'on': {}
 jobs:
   test:
     runs-on: ubuntu-18.04
