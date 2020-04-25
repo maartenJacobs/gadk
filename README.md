@@ -2,6 +2,12 @@
 
 The extremely unofficial Github Actions Development Kit.
 
+## Features
+
+* Define Github Actions Workflows as Python.
+* Share common Workflow patterns, like build-test-deploy.
+* Abstract features like Artifacts.
+
 ## Example
 
 Below is a very simple example of generating a Workflow file. Take it with a grain of salt.
@@ -58,3 +64,11 @@ jobs:
     - run: make lint
     - run: make test
 ```
+
+## Roadmap
+
+* Feature completeness: the first version of `gadk` was created to scratch a limited itch.
+The next step is to represent all possible workflows.
+* Validation: the configuration is not validated but elements like `workflow.on` are required.
+In the future this could be validated using a Yaml schema validator and runtime checks, e.g. specifying
+a non-existent job in `job.needs`.
