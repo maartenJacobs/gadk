@@ -1,0 +1,10 @@
+name: foobar service
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - run: make build
+    - run: make lint verbose="1"
+    - run: make test verbose="1" suite="unit"
+

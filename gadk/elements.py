@@ -119,16 +119,16 @@ class Artifact:
     def __init__(self, *, name: str, path: str) -> None:
         super().__init__()
         self._name: str = name
-        self._path: str = path
+        self.path: str = path
 
     def as_upload(self) -> UsesStep:
         return UsesStep(
-            action=ACTION_UPLOAD, with_args={"name": self._name, "path": self._path,}
+            action=ACTION_UPLOAD, with_args={"name": self._name, "path": self.path}
         )
 
     def as_download(self) -> UsesStep:
         return UsesStep(
-            action=ACTION_DOWNLOAD, with_args={"name": self._name, "path": self._path,}
+            action=ACTION_DOWNLOAD, with_args={"name": self._name, "path": self.path}
         )
 
 

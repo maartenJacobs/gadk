@@ -1,6 +1,12 @@
 .venv
 .python-version
 actions.py
+!tests/**/actions.py
 build/
 dist/
 *.egg-info/
+.tox/
+__pycache__
+tests/integration/**/actual.yml
+tests/integration/**/errors.log
+tests/integration/**/diff.log

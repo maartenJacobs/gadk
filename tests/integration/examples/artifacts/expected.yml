@@ -1,0 +1,21 @@
+name: my service workflow
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - run: make build
+    - uses: actions/upload-artifact@v1
+      with:
+        name: code-archive
+        path: build/code.zip
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: code-archive
+        path: build/code.zip
+    - run: scp build/code.zip
+
