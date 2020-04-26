@@ -36,10 +36,10 @@ class On(Yamlable):
 
     def to_yaml(self) -> Any:
         on = {}
-        if self._paths:
-            on["paths"] = list(self._paths)
         if self._branches:
             on["branches"] = list(self._branches)
+        if self._paths:
+            on["paths"] = list(self._paths)
         return on
 
 

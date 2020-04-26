@@ -13,6 +13,7 @@
   In the example above, `ServiceA` will be detected as a workflow.
   `BaseService` will not be rendered as expected; only concrete workflows
   are rendered.
+* The `workflow.on.branches` is now rendered before `workflow.on.paths`.
 
 # 0.1.0
 

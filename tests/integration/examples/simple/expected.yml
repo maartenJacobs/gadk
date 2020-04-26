@@ -5,11 +5,11 @@ name: my service workflow
     - src/service/*.py
     - src/service.yml
   push:
+    branches:
+    - master
     paths:
     - src/service/*.py
     - src/service.yml
-    branches:
-    - master
 jobs:
   test:
     runs-on: ubuntu-18.04
