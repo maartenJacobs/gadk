@@ -1,69 +1,84 @@
-# GADK
+# GADK: codify Github Actions Workflows
+
+[![PyPI version](https://badge.fury.io/py/gadk.svg)](https://badge.fury.io/py/gadk)
 
 The extremely unofficial Github Actions Development Kit.
 
-## Features
+GADK can be used to:
 
-* Define Github Actions Workflows as Python.
-* Share common Workflow patterns, like build-test-deploy.
+* Define Github Actions Workflows as Python code and sync them to `.github/workflows/`.
+* Share common Workflow patterns such as build-test-deploy.
 * Abstract features like Artifacts.
 
-## Example
+`gadk` mirrors the options supported by Github Actions Workflows so that you can generate
+workflows from Python code. The classes exported from the `gadk` module
+should be sufficient to replicate existing workflows, with the additional advantage of
+using Python's mechanisms of abstraction.
 
-Below is a very simple example of generating a Workflow file. Take it with a grain of salt.
-GADK only shines when there are more workflows that look similar or share configuration.
+## Installation
 
-Create a file called actions.py:
+GADK can be installed using `pip`.
 
-```python3
-from gadk import *
-
-
-class MyService(Workflow):
-    def __init__(self) -> None:
-        super().__init__("my_service", "my service workflow")
-
-        paths = [
-            "src/service/*.py",
-            "src/service.yml",
-        ]
-        self.on(
-            pull_request=On(paths=paths), push=On(branches=["master"], paths=paths),
-        )
-
-        self.jobs["test"] = Job(
-            steps=[
-                RunStep("make build"),
-                RunStep("make lint"),
-                RunStep("make test"),
-            ],
-        )
+```shell script
+pip install gadk
 ```
 
-Run `python gadk/cli.py`. You should see the following printed (soon to be written to a file):
+## Instructions
 
-```yaml
-name: my service workflow
-'on':
-  pull_request:
-    paths:
-    - src/service/*.py
-    - src/service.yml
-  push:
-    paths:
-    - src/service/*.py
-    - src/service.yml
-    branches:
-    - master
-jobs:
-  test:
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v1
-    - run: make build
-    - run: make lint
-    - run: make test
-```
+### Setup
+
+1. Create a file called `actions.py` in the root directory of your project.
+1. Enter the following simple workflow with import:
+    ```python
+    from gadk import *
+
+
+    class MyWorkflow(Workflow):
+        def __init__(self) -> None:
+            super().__init__("my_workflow", "my workflow")
+
+            self.on(pull_request=On(paths=["src/**"]), push=On(branches=["master"]))
+            self.jobs["test"] = Job(
+                steps=[
+                    RunStep("make test"),
+                ],
+            )
+    ```
+1. Run `gadk`.
+1. You should now have a file called `.github/workflows/my_workflow.yml` with the contents
+of your workflow.
+
+### Creating workflows
+
+Creating workflows starts with the `Workflow` class.
+
+The `Workflow` class is the top-level element to represent a Github Action Workflow. You would
+create a new class that extends `Workflow` when you are creating a new GADK project, or want to
+test/deploy a new service or subproject. In the constructor of this new class you would specify
+when the workflow is triggered, its jobs, the required environment variables, etc.
+
+When initialising the `Workflow` class, you are required to specify a short name that is also
+used as the filename in `.github/workflows/`. Additionally you may add a human-readable name.
+
+#### When to run the workflow
+
+Explain `self.on` and `On` class.
+
+#### Adding jobs
+
+Explain `self.jobs` and `Job` class.
+
+#### Expressions
+
+Explain Github expressions and `Expression` class.
+
+#### Environment variables
+
+Explain `EnvVars` type alias.
+
+#### Artifacts
+
+Explain usage and `Artifacts` shortcut.
 
 ## Roadmap
 
