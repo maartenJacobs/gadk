@@ -1,3 +1,4 @@
+# This file is managed by gadk. For more information see https://pypi.org/project/gadk/.
 name: bar service
 'on': {}
 jobs:
@@ -8,6 +9,7 @@ jobs:
     - run: make name="bar" build
     - run: make name="bar" test
 
+# This file is managed by gadk. For more information see https://pypi.org/project/gadk/.
 name: foo service
 'on': {}
 jobs:

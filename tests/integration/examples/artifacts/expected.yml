@@ -1,3 +1,4 @@
+# This file is managed by gadk. For more information see https://pypi.org/project/gadk/.
 name: my service workflow
 'on': {}
 jobs:

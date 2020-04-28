@@ -8,14 +8,8 @@ class MyService(Workflow):
         code_artifact = Artifact(name="code-archive", path="build/code.zip")
 
         self.jobs["build"] = Job(
-            steps=[
-                RunStep("make build"),
-                code_artifact.as_upload(),
-            ],
+            steps=[RunStep("make build"), code_artifact.as_upload(),],
         )
         self.jobs["deploy"] = Job(
-            steps=[
-                code_artifact.as_download(),
-                RunStep(f"scp {code_artifact.path}")
-            ],
+            steps=[code_artifact.as_download(), RunStep(f"scp {code_artifact.path}")],
         )

@@ -1,3 +1,7 @@
+# 0.1.2
+
+* Generated files now start with a comment to prevent manual modification.
+
 # 0.1.1
 
 * Abstractions of workflows are now supported:

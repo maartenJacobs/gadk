@@ -201,4 +201,8 @@ class Workflow(Yamlable):
         return workflow
 
     def render(self) -> str:
-        return yaml.safe_dump(self.to_yaml(), sort_keys=False)
+        header = (
+            "# This file is managed by gadk. "
+            "For more information see https://pypi.org/project/gadk/."
+        )
+        return header + "\n" + yaml.safe_dump(self.to_yaml(), sort_keys=False)

@@ -7,5 +7,3 @@ class BarService(Service):
 
     def service_name(self) -> str:
         return "bar"
-
-

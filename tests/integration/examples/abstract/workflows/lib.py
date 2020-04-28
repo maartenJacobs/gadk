@@ -10,8 +10,8 @@ class Service(Workflow, ABC):
 
         self.jobs["test"] = Job(
             steps=[
-                RunStep(f"make name=\"{name}\" build"),
-                RunStep(f"make name=\"{name}\" test"),
+                RunStep(f'make name="{name}" build'),
+                RunStep(f'make name="{name}" test'),
             ],
         )
 

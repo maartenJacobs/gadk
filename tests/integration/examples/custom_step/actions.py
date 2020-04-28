@@ -3,12 +3,12 @@ from gadk import *
 
 class MakeStep(RunStep):
     def __init__(
-            self,
-            make_cmd: str,
-            *,
-            cmd_args: Optional[Dict[str, str]] = None,
-            name: Optional[str] = None,
-            env: Optional[Dict[str, str]] = None,
+        self,
+        make_cmd: str,
+        *,
+        cmd_args: Optional[Dict[str, str]] = None,
+        name: Optional[str] = None,
+        env: Optional[Dict[str, str]] = None,
     ) -> None:
         cmd: str = f"make {make_cmd}"
         if cmd_args:

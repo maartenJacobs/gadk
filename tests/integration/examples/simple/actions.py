@@ -14,9 +14,5 @@ class MyService(Workflow):
         )
 
         self.jobs["test"] = Job(
-            steps=[
-                RunStep("make build"),
-                RunStep("make lint"),
-                RunStep("make test"),
-            ],
+            steps=[RunStep("make build"), RunStep("make lint"), RunStep("make test"),],
         )
