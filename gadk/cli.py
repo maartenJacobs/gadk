@@ -1,8 +1,8 @@
-import abc
 import importlib
 import inspect
 from os import getcwd, makedirs
-from typing import Any, List, Set
+from os.path import exists
+from typing import List, Set, Optional
 
 import click
 import sys
@@ -19,7 +19,7 @@ def output_to_file(workflow: Workflow):
 
 
 def output_to_stdout(workflow: Workflow):
-    print(workflow.render())
+    click.echo(workflow.render())
 
 
 def find_workflows() -> List[Workflow]:
@@ -66,29 +66,81 @@ def find_workflows() -> List[Workflow]:
     ]
 
 
-@click.command(context_settings={"help_option_names": ["-h", "--help"]})
+def import_workflows():
+    # Import actions.py from the current working directory.
+    sys.path.insert(0, getcwd())
+    importlib.import_module("actions")
+    sys.path.pop(0)
+
+    # Sort workflows for consistency.
+    return sorted(find_workflows(), key=lambda w: w.name)
+
+
+def fetch_actual_workflow_contents(workflow_name: str) -> Optional[str]:
+    workflow_path = f".github/workflows/{workflow_name}.yml"
+    if not exists(workflow_path):
+        return None
+    else:
+        with open(f".github/workflows/{workflow_name}.yml") as fd:
+            return fd.read()
+
+
+def _sync(print_to_stdout: bool):
+    # Determine output per workflow.
+    outputter = output_to_stdout if print_to_stdout else output_to_file
+
+    # Assume actions.py imports all elements of gadk to get subclasses of Workflow.
+    workflows = import_workflows()
+    for workflow in workflows:
+        outputter(workflow)
+
+
+@click.group(
+    invoke_without_command=True,
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
+@click.pass_context
 @click.option(
     "--print/--no-print",
     default=False,
     help="Print workflow YAML to stdout. By default each workflow is written to .github/workflows/.",
 )
 @click.version_option()
-def cmd(print: bool):
+def cmd(ctx: click.Context, print: bool = False):
     """Generate Github Actions workflows from code."""
+    if ctx.invoked_subcommand is None:
+        _sync(print)
 
-    # Import actions.py from the current working directory.
-    sys.path.insert(0, getcwd())
-    importlib.import_module("actions")
-    sys.path.pop(0)
 
-    # Determine output per workflow.
-    outputter = output_to_stdout if print else output_to_file
+@cmd.command()
+@click.option(
+    "--print/--no-print",
+    default=False,
+    help="Print workflow YAML to stdout. By default each workflow is written to .github/workflows/.",
+)
+def sync(print: bool):
+    """Generate Github Actions workflows from code."""
+    _sync(print)
 
-    # Assume actions.py imports all elements of gadk to get subclasses of Workflow.
-    # Sort workflows for consistency.
-    workflows = sorted(find_workflows(), key=lambda w: w.name)
-    for workflow in workflows:
-        outputter(workflow)
+
+@cmd.command()
+def check():
+    """Check if generated workflow files are up to date."""
+    success = True
+    for workflow in import_workflows():
+        actual_content = fetch_actual_workflow_contents(workflow.filename)
+        if actual_content is None or actual_content != workflow.render():
+            click.echo(
+                click.style(f"Workflow {workflow.filename} is outdated!", fg="red")
+            )
+            success = False
+        else:
+            click.echo(f"Workflow {workflow.filename} is up to date.")
+
+    if not success:
+        raise click.exceptions.ClickException(
+            "Some workflows are outdated. Please run gadk to sync workflows."
+        )
 
 
 if __name__ == "__main__":
