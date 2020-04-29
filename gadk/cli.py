@@ -72,6 +72,7 @@ def find_workflows() -> List[Workflow]:
     default=False,
     help="Print workflow YAML to stdout. By default each workflow is written to .github/workflows/.",
 )
+@click.version_option()
 def cmd(print: bool):
     """Generate Github Actions workflows from code."""
 
