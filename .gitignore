@@ -11,3 +11,4 @@ tests/integration/**/actual*.yml
 tests/integration/**/errors*.log
 tests/integration/**/diff*.log
 .mypy_cache/
+.coverage

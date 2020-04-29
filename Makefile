@@ -10,3 +10,7 @@ format:
 publish:
 	rm -rf dist/ gadk.egg-info/
 	poetry publish --build
+
+coverage:
+	coverage run -m pytest
+	coverage report

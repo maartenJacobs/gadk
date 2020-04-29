@@ -182,11 +182,11 @@ class Workflow(Yamlable):
     def on(self, pull_request: Optional[On] = None, push: Optional[On] = None):
         if pull_request:
             self._on["pull_request"] = pull_request
-        else:
+        elif "pull_request" in self._on:
             del self._on["pull_request"]
         if push:
             self._on["push"] = push
-        else:
+        elif "push" in self._on:
             del self._on["push"]
 
     def to_yaml(self) -> Any:
