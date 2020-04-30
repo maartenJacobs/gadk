@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gadk"
-version = "0.2.1"
+version = "0.2.2"
 description = "Unofficial Github Actions Development Kit"
 authors = ["Maarten Jacobs <maarten.j.jacobs@gmail.com>"]
 readme = "README.md"

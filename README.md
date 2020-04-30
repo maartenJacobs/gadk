@@ -136,8 +136,8 @@ between jobs, for instance when building code for deployment and verifying the c
 and finally deploying said artifact. They can also be used for debugging, as Github Actions expose the artifacts
 created by a workflow.
 
-The default implementation of artifacts uses the `actions/upload-artifact@v1` action to upload an artifact
-in one job and then use the `actions/download-artifact@v1` action to download the artifact in a downstream
+The default implementation of artifacts uses the `actions/upload-artifact@v2` action to upload an artifact
+in one job and then uses the `actions/download-artifact@v2` action to download the artifact in a downstream
 job.
 
 `gadk` provides a simple abstraction of artifacts called `Artifact`. To use it you create an artifact

@@ -1,3 +1,8 @@
+# 0.2.2
+
+* `Artifact` now uses v2 of the download and upload actions. v2 includes a bug
+fix for random upload failures.
+
 # 0.2.1
 
 * BUG FIX: `Step.env` was not rendered. It is now rendered after the `run` or `uses`
