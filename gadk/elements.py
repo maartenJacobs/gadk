@@ -66,7 +66,12 @@ class Step(Yamlable, ABC):
             step["name"] = self._name
         if self._if:
             step["if"] = self._if
-        return self.step_extension(step)
+        step = self.step_extension(step)
+        if self._env:
+            from .utils import env_vars_to_yaml
+
+            step["env"] = env_vars_to_yaml(self._env)
+        return step
 
     @abstractmethod
     def step_extension(self, step: Dict) -> Dict:

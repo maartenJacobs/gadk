@@ -1,3 +1,8 @@
+# 0.2.1
+
+* BUG FIX: `Step.env` was not rendered. It is now rendered after the `run` or `uses`
+property.
+
 # 0.2.0
 
 * `gadk check` has been added to check if the generated workflow files match

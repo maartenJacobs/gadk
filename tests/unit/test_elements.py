@@ -31,3 +31,18 @@ class TestWorkflowOn:
                 "pull_request": {"paths": ["frontend/**"], "branches": ["master"],},
             },
         }
+
+
+class TestStep:
+    def test_env_is_rendered(self):
+        env = {
+            "DEPLOY_ENV": "prod",
+            "DEPLOY_SECRET": Expression("secrets.KEY"),
+        }
+        expected_env = {
+            "DEPLOY_ENV": "prod",
+            "DEPLOY_SECRET": "${{ secrets.KEY }}",
+        }
+
+        assert RunStep("build", env=env).to_yaml()["env"] == expected_env
+        assert UsesStep(ACTION_UPLOAD, env=env).to_yaml()["env"] == expected_env
