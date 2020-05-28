@@ -1,8 +1,6 @@
 from abc import abstractmethod, ABC
 from typing import Any, Dict, Optional, Iterable, List, Union
 
-import yaml
-
 from .constants import *
 
 
@@ -206,8 +204,9 @@ class Workflow(Yamlable):
         return workflow
 
     def render(self) -> str:
+        from .utils import dump_yaml
         header = (
             "# This file is managed by gadk. "
             "For more information see https://pypi.org/project/gadk/."
         )
-        return header + "\n" + yaml.safe_dump(self.to_yaml(), sort_keys=False)
+        return header + "\n" + dump_yaml(self.to_yaml())
