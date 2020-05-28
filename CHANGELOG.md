@@ -1,3 +1,7 @@
+# 0.3.0
+
+* BUG FIX: Anchors and aliases are no longer rendered. Github Actions does not support them.
+
 # 0.2.2
 
 * `Artifact` now uses v2 of the download and upload actions. v2 includes a bug
