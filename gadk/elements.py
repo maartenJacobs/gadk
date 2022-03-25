@@ -10,6 +10,11 @@ class Yamlable(ABC):
         """Return a representation of the object that can be rendered as YAML."""
 
 
+class Null(Yamlable):
+    def to_yaml(self) -> str:
+        return None
+
+
 class Expression(Yamlable):
     def __init__(self, expr: str) -> None:
         super().__init__()
@@ -182,7 +187,12 @@ class Workflow(Yamlable):
         self._on: Dict[str, On] = {}
         self.jobs: Dict[str, Job] = {}
 
-    def on(self, pull_request: Optional[On] = None, push: Optional[On] = None):
+    def on(
+        self,
+        pull_request: Optional[On] = None,
+        push: Optional[On] = None,
+        workflow_dispatch: Optional[Null] = None,
+    ):
         if pull_request:
             self._on["pull_request"] = pull_request
         elif "pull_request" in self._on:
@@ -191,6 +201,10 @@ class Workflow(Yamlable):
             self._on["push"] = push
         elif "push" in self._on:
             del self._on["push"]
+        if workflow_dispatch:
+            self._on["workflow_dispatch"] = workflow_dispatch
+        elif "workflow_dispatch" in self._on:
+            del self._on["workflow_dispatch"]
 
     def to_yaml(self) -> Any:
         workflow: Dict[str, Any] = {}
