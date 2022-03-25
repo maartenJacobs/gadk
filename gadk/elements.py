@@ -182,7 +182,12 @@ class Workflow(Yamlable):
         self._on: Dict[str, On] = {}
         self.jobs: Dict[str, Job] = {}
 
-    def on(self, pull_request: Optional[On] = None, push: Optional[On] = None):
+    def on(
+        self,
+        pull_request: Optional[On] = None,
+        push: Optional[On] = None,
+        workflow_dispatch: bool = False,
+    ):
         if pull_request:
             self._on["pull_request"] = pull_request
         elif "pull_request" in self._on:
@@ -191,6 +196,15 @@ class Workflow(Yamlable):
             self._on["push"] = push
         elif "push" in self._on:
             del self._on["push"]
+        if workflow_dispatch not in [True, False]:
+            raise NotImplementedError(
+                "`workflow_dispatch` must be True or False (further "
+                "configuration not yet supported)."
+            )
+        if workflow_dispatch:
+            self._on["workflow_dispatch"] = None
+        elif "workflow_dispatch" in self._on:
+            del self._on["workflow_dispatch"]
 
     def to_yaml(self) -> Any:
         workflow: Dict[str, Any] = {}
