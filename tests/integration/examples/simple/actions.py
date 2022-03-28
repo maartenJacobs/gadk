@@ -10,7 +10,9 @@ class MyService(Workflow):
             "src/service.yml",
         ]
         self.on(
-            pull_request=On(paths=paths), push=On(branches=["master"], paths=paths),
+            pull_request=On(paths=paths),
+            push=On(branches=["master"], paths=paths),
+            workflow_dispatch=Null(),
         )
 
         self.jobs["test"] = Job(
