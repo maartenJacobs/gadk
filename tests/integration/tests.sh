@@ -16,6 +16,10 @@ diff_filename="diff-$python_version.log"
 
 passed=0
 
+function trim() {
+  xargs echo -n
+}
+
 for test_scenario in tests/integration/examples/*
 do
   cd "$test_scenario"
@@ -25,7 +29,7 @@ do
   set -e
 
   # Confirm that there are no errors.
-  if [[ $(wc -l $errors_filename) == "0 $errors_filename" ]]
+  if [[ $(wc -l $errors_filename | trim) == "0 $errors_filename" ]]
   then
     echo "No errors in $test_scenario"
   else
@@ -37,7 +41,7 @@ do
   fi
 
   # Confirm that actual.yml is not empty.
-  if [[ $(wc -l $actual_filename) == "0 $actual_filename" ]]
+  if [[ $(wc -l $actual_filename | trim) == "0 $actual_filename" ]]
   then
     echo "$test_scenario seems to be WIP!"
     passed=1
@@ -46,7 +50,7 @@ do
   else
     # Confirm that actual.yml matches expected.yml.
     diff expected.yml $actual_filename > $diff_filename
-    if [[ $(wc -l $diff_filename) == "0 $diff_filename" ]]
+    if [[ $(wc -l $diff_filename | trim) == "0 $diff_filename" ]]
     then
       echo "$test_scenario has passed!"
     else
