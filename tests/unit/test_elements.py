@@ -1,6 +1,19 @@
 from gadk import *
 
 
+class TestWorkflow:
+    def test_simple_concurrency(self):
+        workflow = Workflow("foo", concurrency_group="my_group")
+        assert workflow.to_yaml() == {"concurrency": "my_group", "on": {}}
+
+    def test_cancel_in_progress_concurrency(self):
+        workflow = Workflow("foo", concurrency_group="my_group", cancel_in_progress=True)
+        assert workflow.to_yaml() == {
+            "concurrency": {"group": "my_group", "cancel-in-progress": True},
+            "on": {},
+        }
+
+
 class TestWorkflowOn:
     def test_on_only_push(self):
         workflow = Workflow("foo")
