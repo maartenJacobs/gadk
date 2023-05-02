@@ -10,6 +10,11 @@ class Yamlable(ABC):
         """Return a representation of the object that can be rendered as YAML."""
 
 
+class Null(Yamlable):
+    def to_yaml(self) -> str:
+        return None
+
+
 class Expression(Yamlable):
     def __init__(self, expr: str) -> None:
         super().__init__()
@@ -175,14 +180,33 @@ class Job(Yamlable):
 
 
 class Workflow(Yamlable):
-    def __init__(self, filename: str, name: Optional[str] = None) -> None:
+    def __init__(
+            self,
+            filename: str,
+            name: Optional[str] = None,
+            *,
+            concurrency_group: Optional[str] = None,
+            cancel_in_progress: bool = False,
+    ) -> None:
+        if cancel_in_progress and concurrency_group is None:
+            raise ValueError(
+                "cancel_in_progress requires a concurrency_group to be set"
+            )
+
         super().__init__()
         self.filename: str = filename
         self.name: Optional[str] = name
+        self.concurrency_group: Optional[str] = concurrency_group
+        self.cancel_in_progress: bool = cancel_in_progress
         self._on: Dict[str, On] = {}
         self.jobs: Dict[str, Job] = {}
 
-    def on(self, pull_request: Optional[On] = None, push: Optional[On] = None):
+    def on(
+        self,
+        pull_request: Optional[On] = None,
+        push: Optional[On] = None,
+        workflow_dispatch: Optional[Null] = None,
+    ):
         if pull_request:
             self._on["pull_request"] = pull_request
         elif "pull_request" in self._on:
@@ -191,11 +215,23 @@ class Workflow(Yamlable):
             self._on["push"] = push
         elif "push" in self._on:
             del self._on["push"]
+        if workflow_dispatch:
+            self._on["workflow_dispatch"] = workflow_dispatch
+        elif "workflow_dispatch" in self._on:
+            del self._on["workflow_dispatch"]
 
     def to_yaml(self) -> Any:
         workflow: Dict[str, Any] = {}
         if self.name:
             workflow["name"] = self.name
+        if self.concurrency_group:
+            if self.cancel_in_progress:
+                workflow["concurrency"] = {
+                    "group": self.concurrency_group,
+                    "cancel-in-progress": True,
+                }
+            else:
+                workflow["concurrency"] = self.concurrency_group
         workflow["on"] = {on_key: on.to_yaml() for on_key, on in self._on.items()}
         if self.jobs:
             workflow["jobs"] = {
